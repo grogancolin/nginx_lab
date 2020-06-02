@@ -1,0 +1,17 @@
+version: "3"
+services:
+  web:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8081:80"
+  backend:
+    build: ./backend/
+    ports:
+      - "8080:8080"
+  caller:
+    image: tutum/curl
+    depends_on:
+      - web
+    entrypoint: ["curl", "-H Host:test", "web:80/"]
